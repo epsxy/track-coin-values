@@ -15,28 +15,47 @@ import {
   Legend
 } from "recharts";
 import moment from "moment";
+import green from "@material-ui/core/colors/green";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import "./styles.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { graphData: [] };
+    this.state = { graphData: [], timeLength: "7d" };
   }
   componentDidMount() {
-    fetch("https://api.coinranking.com/v1/public/coin/1335/history/7d?base=EUR")
+    this.fetchData();
+  }
+
+  fetchData = () => {
+    console.log(this.state.timeLength);
+    fetch(
+      `https://api.coinranking.com/v1/public/coin/1335/history/${
+        this.state.timeLength
+      }?base=EUR`
+    )
       .then(res => res.json())
       .then(res => {
         this.setState({ graphData: res.data.history });
       });
-  }
+  };
+
+  updateTimeLength = event => {
+    this.setState({ timeLength: event.target.value }, () => {
+      this.fetchData();
+    });
+  };
 
   render() {
     return (
       <div className="App">
         <h1>Hello CodeSandbox</h1>
         <h2>Start editing to see some magic happen!</h2>
-        <ResponsiveContainer width="90%" height={300}>
+        <ResponsiveContainer width="100%" height={500}>
           <LineChart
             data={this.state.graphData}
             margin={{
@@ -51,17 +70,60 @@ class App extends Component {
               dataKey="timestamp"
               tick={true}
               type="number"
-              domain={[1551391200000, 1551995273741]}
+              domain={["dataMin", "dataMax"]}
               tickFormatter={timestamp =>
                 moment(timestamp).format("YYYY-MM-DD")
               }
             />
             <YAxis />
-            <Tooltip />
+            <Tooltip
+              labelFormatter={(timestamp, price, props) => [
+                moment(timestamp).format("LLL"),
+                price
+              ]}
+            />
             <Legend />
             <Line type="monotone" dataKey="price" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
+        <RadioGroup
+          aria-label="position"
+          name="position"
+          value={this.state.timeLength}
+          onChange={this.updateTimeLength}
+          row
+        >
+          <FormControlLabel
+            value="24h"
+            control={<Radio color="primary" />}
+            label="24 hours"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            value="7d"
+            control={<Radio color="primary" />}
+            label="7 days"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            value="30d"
+            control={<Radio color="primary" />}
+            label="30 days"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            value="1y"
+            control={<Radio color="primary" />}
+            label="1 year"
+            labelPlacement="end"
+          />
+          <FormControlLabel
+            value="5y"
+            control={<Radio color="primary" />}
+            label="5 years"
+            labelPlacement="end"
+          />
+        </RadioGroup>
       </div>
     );
   }
