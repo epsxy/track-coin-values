@@ -47,8 +47,8 @@ class Graph extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps !== this.props) {
-      this.fetchCoinData()
+    if (prevProps !== this.props) {
+      this.fetchCoinData();
     }
   }
 
@@ -65,7 +65,7 @@ class Graph extends Component {
     fetch(
       `https://api.coinranking.com/v1/public/coin/${
         this.state.coinId
-      }/history/${this.props.timeLength}?base=${this.state.baseCurrency}`
+      }/history/${this.props.timeLength}?base=${this.props.currency}`
     )
       .then(res => res.json())
       .then(res => {
@@ -75,12 +75,6 @@ class Graph extends Component {
 
   updateCoinId = event => {
     this.setState({ coinId: event.target.value }, () => {
-      this.fetchCoinData();
-    });
-  };
-
-  updateBaseCurrencyId = event => {
-    this.setState({ baseCurrency: event.target.value }, () => {
       this.fetchCoinData();
     });
   };
@@ -137,25 +131,6 @@ class Graph extends Component {
           </Select>
           <FormHelperText>Select your coin</FormHelperText>
         </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="base-currency-input">Currency</InputLabel>
-          <Select
-            value={this.state.baseCurrency}
-            onChange={this.updateBaseCurrencyId}
-            input={<Input name="baseCurrencyId" id="base-currency-input" />}
-          >
-            <MenuItem key="EUR" value="EUR">
-              Euro
-            </MenuItem>
-            <MenuItem key="USD" value="USD">
-              Dollar USD
-            </MenuItem>
-            <MenuItem key="JPY" value="JPY">
-              Japanese Yen
-            </MenuItem>
-          </Select>
-          <FormHelperText>Select the base currency</FormHelperText>
-        </FormControl>
       </div>
     );
   }
@@ -163,10 +138,9 @@ class Graph extends Component {
 
 const mapStateToProps = state => {
   return {
-    timeLength: state.timeLength
+    timeLength: state.timeLength,
+    currency: state.currency
   };
 };
 
-export default connect(
-  mapStateToProps
-)(Graph);
+export default connect(mapStateToProps)(Graph);

@@ -14,11 +14,11 @@ function rootReducer(state = initialState, action) {
   switch (action.type) {
     case SELECT_COIN:
       return Object.assign({}, state, {
-        coindId: action.payload.coindId
+        coindId: action.payload
       });
     case SELECT_CURRENCY:
       return Object.assign({}, state, {
-        currency: action.payload.currency
+        currency: action.payload
       });
     case SELECT_TIME_LENGTH:
       return Object.assign({}, state, {

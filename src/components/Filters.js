@@ -11,17 +11,16 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { selectTimeLength } from "../actions/index";
+import { selectTimeLength, selectCurrency } from "../actions/index";
 import { connect } from "react-redux";
 
 class Filters extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { timeLength: "7d" };
-  }
-
   updateTimeLength = event => {
     this.props.selectTimeLength(event.target.value);
+  };
+
+  updateCurrency = event => {
+    this.props.selectCurrency(event.target.value);
   };
 
   render() {
@@ -65,6 +64,25 @@ class Filters extends Component {
             labelPlacement="end"
           />
         </RadioGroup>
+        <FormControl>
+          <InputLabel htmlFor="base-currency-input">Currency</InputLabel>
+          <Select
+            value={this.props.currency}
+            onChange={this.updateCurrency}
+            input={<Input name="currency" id="base-currency-input" />}
+          >
+            <MenuItem key="EUR" value="EUR">
+              Euro
+            </MenuItem>
+            <MenuItem key="USD" value="USD">
+              Dollar USD
+            </MenuItem>
+            <MenuItem key="JPY" value="JPY">
+              Japanese Yen
+            </MenuItem>
+          </Select>
+          <FormHelperText>Select the base currency</FormHelperText>
+        </FormControl>
       </div>
     );
   }
@@ -73,12 +91,13 @@ class Filters extends Component {
 const mapStateToProps = state => {
   return {
     timeLength: state.timeLength,
-    dispatch: state.dispatch
+    currency: state.currency
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  selectTimeLength: message => dispatch(selectTimeLength(message))
+  selectTimeLength: timeLength => dispatch(selectTimeLength(timeLength)),
+  selectCurrency: currency => dispatch(selectCurrency(currency))
 });
 
 export default connect(

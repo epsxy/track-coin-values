@@ -9,7 +9,7 @@ export function selectCoin(coin) {
 }
 
 export function selectCurrency(currency) {
-  return { type: SELECT_CURRENCY, payload : currency};
+  return { type: SELECT_CURRENCY, payload: currency };
 }
 
 export function selectTimeLength(timeLength) {
