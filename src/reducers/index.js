@@ -21,7 +21,6 @@ function rootReducer(state = initialState, action) {
         currency: action.payload.currency
       });
     case SELECT_TIME_LENGTH:
-      console.warn("reducer");
       return Object.assign({}, state, {
         timeLength: action.payload
       });

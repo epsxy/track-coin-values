@@ -27,6 +27,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { connect } from "react-redux";
 
 import "./styles.css";
 
@@ -36,7 +37,6 @@ class Graph extends Component {
     this.state = {
       graphData: [],
       coinId: "1",
-      timeLength: "7d",
       baseCurrency: "EUR",
       coinList: []
     };
@@ -46,8 +46,14 @@ class Graph extends Component {
     this.fetCoinList();
   }
 
+  componentDidUpdate(prevProps) {
+    if(prevProps !== this.props) {
+      this.fetchCoinData()
+    }
+  }
+
   fetCoinList = () => {
-    console.log(this.state.timeLength);
+    console.log(this.props.timeLength);
     fetch(`https://api.coinranking.com/v1/public/coins`)
       .then(res => res.json())
       .then(res => {
@@ -56,22 +62,15 @@ class Graph extends Component {
   };
 
   fetchCoinData = () => {
-    console.log(this.state.timeLength);
     fetch(
       `https://api.coinranking.com/v1/public/coin/${
         this.state.coinId
-      }/history/${this.state.timeLength}?base=${this.state.baseCurrency}`
+      }/history/${this.props.timeLength}?base=${this.state.baseCurrency}`
     )
       .then(res => res.json())
       .then(res => {
         this.setState({ graphData: res.data.history });
       });
-  };
-
-  updateTimeLength = event => {
-    this.setState({ timeLength: event.target.value }, () => {
-      this.fetchCoinData();
-    });
   };
 
   updateCoinId = event => {
@@ -127,44 +126,6 @@ class Graph extends Component {
             <Line type="monotone" dataKey="price" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
-        <RadioGroup
-          aria-label="position"
-          name="position"
-          value={this.state.timeLength}
-          onChange={this.updateTimeLength}
-          row
-        >
-          <FormControlLabel
-            value="24h"
-            control={<Radio color="primary" />}
-            label="24 hours"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="7d"
-            control={<Radio color="primary" />}
-            label="7 days"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="30d"
-            control={<Radio color="primary" />}
-            label="30 days"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="1y"
-            control={<Radio color="primary" />}
-            label="1 year"
-            labelPlacement="end"
-          />
-          <FormControlLabel
-            value="5y"
-            control={<Radio color="primary" />}
-            label="5 years"
-            labelPlacement="end"
-          />
-        </RadioGroup>
         <FormControl>
           <InputLabel htmlFor="coin-id-input">Coin</InputLabel>
           <Select
@@ -200,4 +161,12 @@ class Graph extends Component {
   }
 }
 
-export default Graph;
+const mapStateToProps = state => {
+  return {
+    timeLength: state.timeLength
+  };
+};
+
+export default connect(
+  mapStateToProps
+)(Graph);

@@ -21,7 +21,6 @@ class Filters extends Component {
   }
 
   updateTimeLength = event => {
-    console.warn("component");
     this.props.selectTimeLength(event.target.value);
   };
 
