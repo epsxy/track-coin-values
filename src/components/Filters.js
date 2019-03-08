@@ -11,6 +11,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import selectTimeLength from "../actions/index";
+import { connect } from "react-redux";
 
 class Filters extends Component {
   constructor(props) {
@@ -18,13 +20,18 @@ class Filters extends Component {
     this.state = { timeLength: "7d" };
   }
 
+  updateTimeLength = event => {
+    console.warn("component");
+    this.props.selectTimeLength(event.target.value);
+  };
+
   render() {
     return (
       <div>
         <RadioGroup
           aria-label="position"
           name="position"
-          value={this.state.timeLength}
+          value={this.props.timeLength}
           onChange={this.updateTimeLength}
           row
         >
@@ -64,4 +71,20 @@ class Filters extends Component {
   }
 }
 
-export default Filters;
+const mapStateToProps = state => {
+  return {
+    timeLength: state.timeLength,
+    dispatch: state.dispatch
+  };
+};
+
+/*
+const mapDispatchToProps = dispatch => ({
+  selectTimeLength: message => dispatch(selectTimeLength(message))
+});
+*/
+
+export default connect(
+  mapStateToProps,
+  { selectTimeLength }
+)(Filters);

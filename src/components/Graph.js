@@ -88,7 +88,11 @@ class Graph extends Component {
 
   render() {
     const coinsList = this.state.coinList.map(coin => {
-      return <MenuItem value={coin.id}>{coin.name}</MenuItem>;
+      return (
+        <MenuItem key={coin.id} value={coin.id}>
+          {coin.name}
+        </MenuItem>
+      );
     });
     return (
       <div>
@@ -179,9 +183,15 @@ class Graph extends Component {
             onChange={this.updateBaseCurrencyId}
             input={<Input name="baseCurrencyId" id="base-currency-input" />}
           >
-            <MenuItem value="EUR">Euro</MenuItem>
-            <MenuItem value="USD">Dollar USD</MenuItem>
-            <MenuItem value="JPY">Japanese Yen</MenuItem>
+            <MenuItem key="EUR" value="EUR">
+              Euro
+            </MenuItem>
+            <MenuItem key="USD" value="USD">
+              Dollar USD
+            </MenuItem>
+            <MenuItem key="JPY" value="JPY">
+              Japanese Yen
+            </MenuItem>
           </Select>
           <FormHelperText>Select the base currency</FormHelperText>
         </FormControl>
