@@ -78,13 +78,11 @@ const mapStateToProps = state => {
   };
 };
 
-/*
 const mapDispatchToProps = dispatch => ({
   selectTimeLength: message => dispatch(selectTimeLength(message))
 });
-*/
 
 export default connect(
   mapStateToProps,
-  { selectTimeLength }
+  mapDispatchToProps
 )(Filters);
