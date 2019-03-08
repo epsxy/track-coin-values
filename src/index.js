@@ -19,24 +19,49 @@ import green from "@material-ui/core/colors/green";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Input from "@material-ui/core/Input";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FilledInput from "@material-ui/core/FilledInput";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Typography from "@material-ui/core/Typography";
 
 import "./styles.css";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { graphData: [], timeLength: "7d" };
+    this.state = {
+      graphData: [],
+      coinId: "1",
+      timeLength: "7d",
+      baseCurrency: "EUR",
+      coinList: []
+    };
   }
   componentDidMount() {
-    this.fetchData();
+    this.fetchCoinData();
+    this.fetCoinList();
   }
 
-  fetchData = () => {
+  fetCoinList = () => {
+    console.log(this.state.timeLength);
+    fetch(`https://api.coinranking.com/v1/public/coins`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({ coinList: res.data.coins });
+      });
+  };
+
+  fetchCoinData = () => {
     console.log(this.state.timeLength);
     fetch(
-      `https://api.coinranking.com/v1/public/coin/1335/history/${
-        this.state.timeLength
-      }?base=EUR`
+      `https://api.coinranking.com/v1/public/coin/${
+        this.state.coinId
+      }/history/${this.state.timeLength}?base=${this.state.baseCurrency}`
     )
       .then(res => res.json())
       .then(res => {
@@ -46,15 +71,31 @@ class App extends Component {
 
   updateTimeLength = event => {
     this.setState({ timeLength: event.target.value }, () => {
-      this.fetchData();
+      this.fetchCoinData();
+    });
+  };
+
+  updateCoinId = event => {
+    this.setState({ coinId: event.target.value }, () => {
+      this.fetchCoinData();
+    });
+  };
+
+  updateBaseCurrencyId = event => {
+    this.setState({ baseCurrency: event.target.value }, () => {
+      this.fetchCoinData();
     });
   };
 
   render() {
+    const coinsList = this.state.coinList.map(coin => {
+      return <MenuItem value={coin.id}>{coin.name}</MenuItem>;
+    });
     return (
       <div className="App">
-        <h1>Hello CodeSandbox</h1>
-        <h2>Start editing to see some magic happen!</h2>
+        <Typography variant="h1" gutterBottom>
+          Coin tracker
+        </Typography>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart
             data={this.state.graphData}
@@ -124,6 +165,30 @@ class App extends Component {
             labelPlacement="end"
           />
         </RadioGroup>
+        <FormControl>
+          <InputLabel htmlFor="coin-id-input">Coin</InputLabel>
+          <Select
+            value={this.state.coinId}
+            onChange={this.updateCoinId}
+            input={<Input name="coinId" id="coin-id-input" />}
+          >
+            {coinsList}
+          </Select>
+          <FormHelperText>Select your coin</FormHelperText>
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor="base-currency-input">Currency</InputLabel>
+          <Select
+            value={this.state.baseCurrency}
+            onChange={this.updateBaseCurrencyId}
+            input={<Input name="baseCurrencyId" id="base-currency-input" />}
+          >
+            <MenuItem value="EUR">Euro</MenuItem>
+            <MenuItem value="USD">Dollar USD</MenuItem>
+            <MenuItem value="JPY">Japanese Yen</MenuItem>
+          </Select>
+          <FormHelperText>Select the base currency</FormHelperText>
+        </FormControl>
       </div>
     );
   }
