@@ -11,10 +11,34 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-import { selectTimeLength, selectCurrency } from "../actions/index";
+import {
+  selectTimeLength,
+  selectCurrency,
+  selectCoinId
+} from "../actions/index";
 import { connect } from "react-redux";
 
 class Filters extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      coinList: []
+    };
+  }
+
+  componentDidMount = () => {
+    this.fetchCoinList();
+  };
+
+  fetchCoinList = () => {
+    fetch(`https://api.coinranking.com/v1/public/coins`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState(state => ({ coinList: res.data.coins }));
+      });
+  };
+
   updateTimeLength = event => {
     this.props.selectTimeLength(event.target.value);
   };
@@ -23,9 +47,37 @@ class Filters extends Component {
     this.props.selectCurrency(event.target.value);
   };
 
+  updateCoinId = event => {
+    this.props.selectCoinId(event.target.value);
+  };
+
   render() {
+    const coinsList = this.state.coinList.map(coin => {
+      return (
+        <MenuItem key={coin.id} value={coin.id}>
+          {coin.name}
+        </MenuItem>
+      );
+    });
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "2em"
+        }}
+      >
+        <FormControl>
+          <InputLabel htmlFor="coin-id-input">Coin</InputLabel>
+          <Select
+            value={this.props.coinId}
+            onChange={this.updateCoinId}
+            input={<Input name="coinId" id="coin-id-input" />}
+          >
+            {coinsList}
+          </Select>
+          <FormHelperText>Select your coin</FormHelperText>
+        </FormControl>
         <RadioGroup
           aria-label="position"
           name="position"
@@ -91,13 +143,16 @@ class Filters extends Component {
 const mapStateToProps = state => {
   return {
     timeLength: state.timeLength,
-    currency: state.currency
+    currency: state.currency,
+    coinId: state.coinId,
+    coinList: []
   };
 };
 
 const mapDispatchToProps = dispatch => ({
   selectTimeLength: timeLength => dispatch(selectTimeLength(timeLength)),
-  selectCurrency: currency => dispatch(selectCurrency(currency))
+  selectCurrency: currency => dispatch(selectCurrency(currency)),
+  selectCoinId: coinId => dispatch(selectCoinId(coinId))
 });
 
 export default connect(

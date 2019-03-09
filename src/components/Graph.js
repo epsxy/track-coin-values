@@ -35,10 +35,7 @@ class Graph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      graphData: [],
-      coinId: "1",
-      baseCurrency: "EUR",
-      coinList: []
+      graphData: []
     };
   }
   componentDidMount() {
@@ -64,7 +61,7 @@ class Graph extends Component {
   fetchCoinData = () => {
     fetch(
       `https://api.coinranking.com/v1/public/coin/${
-        this.state.coinId
+        this.props.coinId
       }/history/${this.props.timeLength}?base=${this.props.currency}`
     )
       .then(res => res.json())
@@ -80,13 +77,6 @@ class Graph extends Component {
   };
 
   render() {
-    const coinsList = this.state.coinList.map(coin => {
-      return (
-        <MenuItem key={coin.id} value={coin.id}>
-          {coin.name}
-        </MenuItem>
-      );
-    });
     return (
       <div>
         <ResponsiveContainer width="100%" height={500}>
@@ -120,17 +110,6 @@ class Graph extends Component {
             <Line type="monotone" dataKey="price" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
-        <FormControl>
-          <InputLabel htmlFor="coin-id-input">Coin</InputLabel>
-          <Select
-            value={this.state.coinId}
-            onChange={this.updateCoinId}
-            input={<Input name="coinId" id="coin-id-input" />}
-          >
-            {coinsList}
-          </Select>
-          <FormHelperText>Select your coin</FormHelperText>
-        </FormControl>
       </div>
     );
   }
@@ -139,7 +118,8 @@ class Graph extends Component {
 const mapStateToProps = state => {
   return {
     timeLength: state.timeLength,
-    currency: state.currency
+    currency: state.currency,
+    coinId: state.coinId
   };
 };
 

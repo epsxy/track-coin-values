@@ -4,7 +4,7 @@ import {
   SELECT_TIME_LENGTH
 } from "../constants/index";
 
-export function selectCoin(coin) {
+export function selectCoinId(coin) {
   return { type: SELECT_COIN, payload: coin };
 }
 

@@ -14,7 +14,7 @@ function rootReducer(state = initialState, action) {
   switch (action.type) {
     case SELECT_COIN:
       return Object.assign({}, state, {
-        coindId: action.payload
+        coinId: action.payload
       });
     case SELECT_CURRENCY:
       return Object.assign({}, state, {
