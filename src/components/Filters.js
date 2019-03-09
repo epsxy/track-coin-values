@@ -29,6 +29,12 @@ const FiltersContainer = styled.div`
   }
 `;
 
+const TimeLengthGroup = styled(RadioGroup)`
+  && {
+    justify-content: center;
+  }
+`;
+
 class Filters extends Component {
   constructor(props) {
     super(props);
@@ -83,7 +89,7 @@ class Filters extends Component {
           </Select>
           <FormHelperText>Select your coin</FormHelperText>
         </FormControl>
-        <RadioGroup
+        <TimeLengthGroup
           aria-label="position"
           name="position"
           value={this.props.timeLength}
@@ -120,7 +126,7 @@ class Filters extends Component {
             label="5 years"
             labelPlacement="end"
           />
-        </RadioGroup>
+        </TimeLengthGroup>
         <FormControl>
           <InputLabel htmlFor="base-currency-input">Currency</InputLabel>
           <Select
