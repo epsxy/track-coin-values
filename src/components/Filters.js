@@ -17,6 +17,17 @@ import {
   selectCoinId
 } from "../actions/index";
 import { connect } from "react-redux";
+import styled from "styled-components";
+
+const FiltersContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  margin-bottom: 1em;
+  @media (max-width: 550px) {
+    flex-direction: column;
+    width: 90%;
+  }
+`;
 
 class Filters extends Component {
   constructor(props) {
@@ -60,13 +71,7 @@ class Filters extends Component {
       );
     });
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          marginBottom: "2em"
-        }}
-      >
+      <FiltersContainer>
         <FormControl>
           <InputLabel htmlFor="coin-id-input">Coin</InputLabel>
           <Select
@@ -135,7 +140,7 @@ class Filters extends Component {
           </Select>
           <FormHelperText>Select the base currency</FormHelperText>
         </FormControl>
-      </div>
+      </FiltersContainer>
     );
   }
 }

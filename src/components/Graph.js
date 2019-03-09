@@ -85,6 +85,7 @@ class Graph extends Component {
               dataKey="price"
               stroke="#9c27b0"
               dot={false}
+              onMouseOver={value => console.log(value)}
             />
           </LineChart>
         </ResponsiveContainer>
