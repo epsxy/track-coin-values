@@ -1,32 +1,14 @@
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
 import {
-  AreaChart,
-  ReferenceLine,
-  Area,
   LineChart,
   Line,
   XAxis,
-  Label,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Legend
+  ResponsiveContainer
 } from "recharts";
 import moment from "moment";
-import green from "@material-ui/core/colors/green";
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Input from "@material-ui/core/Input";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FilledInput from "@material-ui/core/FilledInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
 import { connect } from "react-redux";
 
 import "./styles.css";
@@ -40,7 +22,6 @@ class Graph extends Component {
   }
   componentDidMount() {
     this.fetchCoinData();
-    this.fetCoinList();
   }
 
   componentDidUpdate(prevProps) {
@@ -48,15 +29,6 @@ class Graph extends Component {
       this.fetchCoinData();
     }
   }
-
-  fetCoinList = () => {
-    console.log(this.props.timeLength);
-    fetch(`https://api.coinranking.com/v1/public/coins`)
-      .then(res => res.json())
-      .then(res => {
-        this.setState({ coinList: res.data.coins });
-      });
-  };
 
   fetchCoinData = () => {
     fetch(
@@ -74,6 +46,11 @@ class Graph extends Component {
     this.setState({ coinId: event.target.value }, () => {
       this.fetchCoinData();
     });
+  };
+
+  formatTimestamp = timestamp => {
+    if (this.props.timeLength === "24h") return moment(timestamp).format("LT");
+    return moment(timestamp).format("L");
   };
 
   render() {
@@ -94,9 +71,7 @@ class Graph extends Component {
               dataKey="timestamp"
               domain={["dataMin", "dataMax"]}
               minTickGap={35}
-              tickFormatter={timestamp =>
-                moment(timestamp).format("YYYY-MM-DD")
-              }
+              tickFormatter={timestamp => this.formatTimestamp(timestamp)}
             />
             <YAxis type="number" domain={["auto", "auto"]} />
             <Tooltip
