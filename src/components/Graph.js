@@ -99,7 +99,7 @@ class Graph extends Component {
                 moment(timestamp).format("YYYY-MM-DD")
               }
             />
-            <YAxis />
+            <YAxis type="number" domain={["auto", "auto"]} />
             <Tooltip
               labelFormatter={(timestamp, price, props) => [
                 moment(timestamp).format("LLL"),
