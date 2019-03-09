@@ -10,7 +10,7 @@ const initialState = {
   timeLength: "30d"
 };
 
-function rootReducer(state = initialState, action) {
+const rootReducer = (state = initialState, action) => {
   switch (action.type) {
     case SELECT_COIN:
       return Object.assign({}, state, {
@@ -27,6 +27,6 @@ function rootReducer(state = initialState, action) {
     default:
       return state;
   }
-}
+};
 
 export default rootReducer;

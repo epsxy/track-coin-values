@@ -4,14 +4,14 @@ import {
   SELECT_TIME_LENGTH
 } from "../constants/index";
 
-export function selectCoinId(coin) {
+export const selectCoinId = coin => {
   return { type: SELECT_COIN, payload: coin };
-}
+};
 
-export function selectCurrency(currency) {
+export const selectCurrency = currency => {
   return { type: SELECT_CURRENCY, payload: currency };
-}
+};
 
-export function selectTimeLength(timeLength) {
+export const selectTimeLength = timeLength => {
   return { type: SELECT_TIME_LENGTH, payload: timeLength };
-}
+};

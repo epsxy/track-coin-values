@@ -66,11 +66,6 @@ class Graph extends Component {
     return moment(timestamp).format("L");
   };
 
-  generateYDomain = () => {
-    return ["auto", "auto"];
-    //return this.state.autoScale ? ["auto", "auto"] : [0, "dataMax"];
-  };
-
   render() {
     console.log("render");
     return (
@@ -107,7 +102,6 @@ class Graph extends Component {
               dataKey="price"
               stroke="#9c27b0"
               dot={false}
-              onMouseOver={value => console.log(value)}
             />
           </LineChart>
         </ResponsiveContainer>
