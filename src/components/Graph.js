@@ -10,14 +10,23 @@ import {
 } from "recharts";
 import moment from "moment";
 import { connect } from "react-redux";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
+import styled from "styled-components";
 
 import "./styles.css";
+
+const GraphControlsContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
 
 class Graph extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      graphData: []
+      graphData: [],
+      autoScale: true
     };
   }
   componentDidMount() {
@@ -48,12 +57,22 @@ class Graph extends Component {
     });
   };
 
+  updateScale = event => {
+    this.setState({ autoScale: event.target.checked });
+  };
+
   formatTimestamp = timestamp => {
     if (this.props.timeLength === "24h") return moment(timestamp).format("LT");
     return moment(timestamp).format("L");
   };
 
+  generateYDomain = () => {
+    return ["auto", "auto"];
+    //return this.state.autoScale ? ["auto", "auto"] : [0, "dataMax"];
+  };
+
   render() {
+    console.log("render");
     return (
       <div>
         <ResponsiveContainer width="100%" height={500}>
@@ -73,7 +92,10 @@ class Graph extends Component {
               minTickGap={35}
               tickFormatter={timestamp => this.formatTimestamp(timestamp)}
             />
-            <YAxis type="number" domain={["auto", "auto"]} />
+            <YAxis
+              type="number"
+              domain={[this.state.autoScale ? "auto" : 0, "auto"]}
+            />
             <Tooltip
               labelFormatter={(timestamp, price, props) => [
                 moment(timestamp).format("LLL"),
@@ -89,6 +111,19 @@ class Graph extends Component {
             />
           </LineChart>
         </ResponsiveContainer>
+        <GraphControlsContainer>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={this.state.autoScale}
+                onChange={this.updateScale}
+                value="scale"
+                color="primary"
+              />
+            }
+            label="Relative Scale"
+          />
+        </GraphControlsContainer>
       </div>
     );
   }
