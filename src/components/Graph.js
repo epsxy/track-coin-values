@@ -92,9 +92,8 @@ class Graph extends Component {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="timestamp"
-              tick={true}
-              type="number"
               domain={["dataMin", "dataMax"]}
+              minTickGap={35}
               tickFormatter={timestamp =>
                 moment(timestamp).format("YYYY-MM-DD")
               }
@@ -106,8 +105,12 @@ class Graph extends Component {
                 price
               ]}
             />
-            <Legend />
-            <Line type="monotone" dataKey="price" stroke="#82ca9d" />
+            <Line
+              type="monotone"
+              dataKey="price"
+              stroke="#9c27b0"
+              dot={false}
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
