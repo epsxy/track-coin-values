@@ -25,7 +25,6 @@ const FiltersContainer = styled.div`
   margin-bottom: 1em;
   @media (max-width: 550px) {
     flex-direction: column;
-    width: 90%;
   }
 `;
 
