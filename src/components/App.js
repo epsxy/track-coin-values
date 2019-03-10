@@ -1,16 +1,32 @@
 import React from "react";
-import Header from "./Header";
-import Graph from "./Graph";
-import Filters from "./Filters";
-import VariationRateReport from "./VariationRateReport";
+import Header from "./header/Header";
+import Graph from "./graph/Graph";
+import Filters from "./filters/Filters";
+import VariationRateReport from "./variationReport/VariationRateReport";
+import Footer from "./footer/Footer";
+import styled from "styled-components";
+
+const ViewContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+`;
+
+const Content = styled.div`
+  flex: 1;
+  padding: 0 10px;
+`;
 
 const App = () => (
-  <div>
+  <ViewContainer>
     <Header />
-    <Filters />
-    <Graph />
-    <VariationRateReport />
-  </div>
+    <Content>
+      <Filters />
+      <Graph />
+      <VariationRateReport />
+    </Content>
+    <Footer />
+  </ViewContainer>
 );
 
 export default App;
