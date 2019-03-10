@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import TextField from "@material-ui/core/TextField";
 import moment from "moment";
 import { connect } from "react-redux";
-import Typography from "@material-ui/core/Typography";
-import styled from "styled-components";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import ArrowForward from "@material-ui/icons/ArrowForward";
