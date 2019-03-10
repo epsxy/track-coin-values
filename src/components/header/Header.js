@@ -43,7 +43,7 @@ const AppTitleText = styled(Typography)`
 `;
 
 const ContributeContainer = styled.div`
-  margin-right: 1em;
+  margin-right: 2em;
 `;
 
 const GithubProjectLink = styled.a`
