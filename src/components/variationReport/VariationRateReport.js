@@ -18,6 +18,7 @@ class VariationRateReport extends Component {
     this.state = {
       coinHistory: [],
       variation: undefined,
+      valueSelectedDay: undefined,
       isVariationInitialized: false
     };
   }
@@ -26,15 +27,22 @@ class VariationRateReport extends Component {
     this.fetchCoinData();
   };
 
+  componentDidUpdate(prevProps) {
+    if (prevProps !== this.props) {
+      this.fetchCoinData();
+    }
+  }
+
   fetchCoinData = () => {
     fetch(
       `https://api.coinranking.com/v1/public/coin/${
         this.props.coinId
-      }/history/5y?base=EUR`
+      }/history/5y?base=${this.props.currency}`
     )
       .then(res => res.json())
       .then(res => {
         this.setState({ coinHistory: res.data.history });
+        this.computePriceVariation();
       });
   };
 
@@ -53,7 +61,11 @@ class VariationRateReport extends Component {
   */
   computePriceVariation = () => {
     if (!this.state.currentDate) {
-      this.setState({ isVariationInitialized: false, variation: undefined });
+      this.setState({
+        isVariationInitialized: false,
+        variation: undefined,
+        valueSelectedDay: undefined
+      });
       return;
     }
     const valuesCurrentDay = this.state.coinHistory.filter(
@@ -61,7 +73,11 @@ class VariationRateReport extends Component {
         moment(value.timestamp).format("YYYY-MM-DD") === this.state.currentDate
     );
     if (!valuesCurrentDay) {
-      this.setState({ isVariationInitialized: true, variation: undefined });
+      this.setState({
+        isVariationInitialized: true,
+        variation: undefined,
+        valueSelectedDay: undefined
+      });
       return;
     }
     const indexOfSelectedValue = this.state.coinHistory.indexOf(
@@ -69,7 +85,11 @@ class VariationRateReport extends Component {
     );
 
     if (indexOfSelectedValue <= 0) {
-      this.setState({ isVariationInitialized: true, variation: undefined });
+      this.setState({
+        isVariationInitialized: true,
+        variation: undefined,
+        valueSelectedDay: undefined
+      });
       return;
     }
 
@@ -94,7 +114,21 @@ class VariationRateReport extends Component {
       averageValuePreviousDay;
     const variation = Math.round(percentage * 100) / 100;
 
-    this.setState({ isVariationInitialized: true, variation: variation });
+    /*
+     * TODO: This is a quick fix.
+     * Some crypto currency values are very small, like 0.0078.
+     * Other ones are very big, such as 4000.
+     * Need to implement a truncate function to deal with this rage of values.
+     */
+    const valueSelectedDay =
+      averageValueCurrentDay > 10
+        ? Math.round(averageValueCurrentDay)
+        : Math.round(averageValueCurrentDay * 1000) / 1000;
+    this.setState({
+      isVariationInitialized: true,
+      variation: variation,
+      valueSelectedDay: valueSelectedDay
+    });
   };
 
   render() {
@@ -114,6 +148,12 @@ class VariationRateReport extends Component {
             }}
           />
         </form>
+        {this.state.valueSelectedDay !== undefined && (
+          <RateText variant="body1" gutterBottom color="textSecondary">
+            {this.state.valueSelectedDay}
+            {this.props.currency}
+          </RateText>
+        )}
         {this.state.variation !== undefined &&
           this.state.isVariationInitialized && (
             <RateText
@@ -139,7 +179,8 @@ class VariationRateReport extends Component {
 
 const mapStateToProps = state => {
   return {
-    coinId: state.coinId
+    coinId: state.coinId,
+    currency: state.currency
   };
 };
 

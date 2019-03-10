@@ -14,7 +14,7 @@ export const VariationRateReportContainer = styled.div`
 
 export const PageTitle = styled(Typography)`
   && {
-    font-size: 1.5em;
+    font-size: 1.2em;
     margin-right: 1em;
     @media (max-width: 550px) {
       margin-bottom: 1em
@@ -25,7 +25,7 @@ export const PageTitle = styled(Typography)`
 
 export const RateText = styled(Typography)`
   && {
-    font-size: 2em;
+    font-size: 1.5em;
     margin-left: 0.5em;
     min-width: 115px;
     @media (max-width: 550px) {
