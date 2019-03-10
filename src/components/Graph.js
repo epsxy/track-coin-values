@@ -16,6 +16,10 @@ import styled from "styled-components";
 
 import "./styles.css";
 
+const GraphContainer = styled.div`
+  margin-bottom: 1em;
+`;
+
 const GraphControlsContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
@@ -102,6 +106,13 @@ class Graph extends Component {
    * time stamp for this moment, and price is the average value during
    * the hour/day/month (depending on the selecting timeLength)
    */
+  /*
+  * TODO:
+  ° - Split the code
+  * - Refactor the code
+  * - Factorise the code
+  * - Test the code
+  */
   refineGraphData = graphData => {
     let pricesIndexedByCommonDate = graphData.reduce((accumulator, data) => {
       const currentDateIndex = moment(data.timestamp).format(
@@ -147,7 +158,7 @@ class Graph extends Component {
 
   render() {
     return (
-      <div>
+      <GraphContainer>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart
             data={this.state.graphData}
@@ -179,6 +190,7 @@ class Graph extends Component {
               type="monotone"
               dataKey="price"
               stroke="#9c27b0"
+              strokeWidth={2}
               dot={false}
             />
           </LineChart>
@@ -218,7 +230,7 @@ class Graph extends Component {
             label="Reduce graph points"
           />
         </GraphControlsContainer>
-      </div>
+      </GraphContainer>
     );
   }
 }
