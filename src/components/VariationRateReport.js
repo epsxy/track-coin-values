@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import ArrowForward from "@material-ui/icons/ArrowForward";
 
 const VariationRateReportContainer = styled.div`
   display: flex;
@@ -32,7 +33,18 @@ const PageTitle = styled(Typography)`
 const RateText = styled(Typography)`
   && {
     font-size: 2em;
-    margin-bottom: 0;
+    margin-left: 0.5em;
+    @media (max-width: 550px) {
+      margin-top: 1em;
+      margin-left: 0;
+    }
+  }
+`;
+
+const NoDataText = styled(Typography)`
+  && {
+    font-size: 2em;
+    margin-left: 0.5em;
     @media (max-width: 550px) {
       margin-top: 1em;
       margin-left: 0;
@@ -65,6 +77,12 @@ class VariationRateReport extends Component {
       });
   };
 
+  updateDateValue = event => {
+    this.setState({ currentDate: event.target.value }, () => {
+      this.computePriceVariation();
+    });
+  };
+
   /*
   * TODO:
   ° - Split the code
@@ -72,11 +90,12 @@ class VariationRateReport extends Component {
   * - Factorise the code
   * - Test the code
   */
-  updateDateValue = event => {
+  computePriceVariation = () => {
     const valuesCurrentDay = this.state.coinHistory.filter(
       value =>
-        moment(value.timestamp).format("YYYY-MM-DD") === event.target.value
+        moment(value.timestamp).format("YYYY-MM-DD") === this.state.currentDate
     );
+    console.log(`valuesCurrentDay=${valuesCurrentDay}`);
     if (!valuesCurrentDay) {
       this.setState({ variation: undefined });
       return;
@@ -84,16 +103,22 @@ class VariationRateReport extends Component {
     const indexOfSelectedValue = this.state.coinHistory.indexOf(
       valuesCurrentDay[0]
     );
+    console.log(`indexOfSelectedValue=${indexOfSelectedValue}`);
 
     if (indexOfSelectedValue <= 0) {
       this.setState({ variation: undefined });
       return;
     }
 
+    /* ISSUE */
     const previousValue = this.state.coinHistory[indexOfSelectedValue - 1];
     const valuesPreviousDay = this.state.coinHistory.filter(
-      value => value.timestamp === previousValue.timestamp
+      value =>
+        moment(value.timestamp).format("YYYY-MM-DD") ===
+        moment(previousValue.timestamp).format("YYYY-MM-DD")
     );
+    console.log(`previousValue=${previousValue}`);
+    console.log(`valuesPreviousDay=${valuesPreviousDay}`);
 
     const averageValuePreviousDay =
       valuesPreviousDay.reduce((sum, data) => {
@@ -103,11 +128,14 @@ class VariationRateReport extends Component {
       valuesCurrentDay.reduce((sum, data) => {
         return sum + parseFloat(data.price);
       }, 0) / valuesCurrentDay.length;
+    console.log(`averageValuePreviousDay=${averageValuePreviousDay}`);
+    console.log(`averageValueCurrentDay=${averageValueCurrentDay}`);
 
     const percentage =
       ((averageValueCurrentDay - averageValuePreviousDay) * 100) /
       averageValuePreviousDay;
     const variation = Math.round(percentage * 100) / 100;
+    console.log(`variation=${variation}`);
     this.setState({ variation: variation });
   };
 
@@ -128,16 +156,20 @@ class VariationRateReport extends Component {
             }}
           />
         </form>
-        {this.state.variation && (
+        {this.state.variation !== undefined && (
           <RateText
             variant="body1"
             gutterBottom
             color={this.state.variation >= 0 ? "primary" : "secondary"}
           >
-            {this.state.variation >= 0 && <ArrowUpward />}
+            {this.state.variation > 0 && <ArrowUpward />}
             {this.state.variation < 0 && <ArrowDownward />}
+            {this.state.variation === 0 && <ArrowForward />}
             {Math.abs(this.state.variation)}%
           </RateText>
+        )}
+        {this.state.variation === undefined && (
+          <NoDataText color="textSecondary">No data</NoDataText>
         )}
         <div />
       </VariationRateReportContainer>
