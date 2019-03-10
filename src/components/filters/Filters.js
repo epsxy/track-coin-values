@@ -15,7 +15,7 @@ import {
   selectTimeLength,
   selectCurrency,
   selectCoinId
-} from "../actions/index";
+} from "../../actions/index";
 import { connect } from "react-redux";
 import styled from "styled-components";
 
