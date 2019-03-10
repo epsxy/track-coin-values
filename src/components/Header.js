@@ -16,7 +16,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 
 const HeaderContainer = styled.div`
-  margin-bottom: 65px;
+  margin-bottom: 85px;
 `;
 
 const AppHeader = styled(AppBar)`
