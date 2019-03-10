@@ -14,8 +14,6 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import styled from "styled-components";
 
-import "./styles.css";
-
 const GraphContainer = styled.div`
   margin-bottom: 1em;
 `;
