@@ -12,12 +12,20 @@ const VariationRateReportContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  @media (max-width: 550px) {
+    flex-direction: column;
+    min-height: 250px;
+  }
 `;
 
 const PageTitle = styled(Typography)`
   && {
     font-size: 1.5em;
     margin-right: 1em;
+    @media (max-width: 550px) {
+      margin-bottom: 1em
+      margin-right: 0;
+    }
   }
 `;
 
@@ -25,7 +33,10 @@ const RateText = styled(Typography)`
   && {
     font-size: 2em;
     margin-bottom: 0;
-    margin-left: 1em;
+    @media (max-width: 550px) {
+      margin-top: 1em;
+      margin-left: 0;
+    }
   }
 `;
 
@@ -34,7 +45,7 @@ class VariationRateReport extends Component {
     super(props);
     this.state = {
       coinHistory: [],
-      variation: ""
+      variation: undefined
     };
   }
 
