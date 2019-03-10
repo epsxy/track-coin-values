@@ -14,6 +14,13 @@ const VariationRateReportContainer = styled.div`
   justify-content: center;
 `;
 
+const PageTitle = styled(Typography)`
+  && {
+    font-size: 1.5em;
+    margin-right: 1em;
+  }
+`;
+
 const RateText = styled(Typography)`
   && {
     font-size: 2em;
@@ -96,6 +103,9 @@ class VariationRateReport extends Component {
   render() {
     return (
       <VariationRateReportContainer>
+        <PageTitle variant="h2" gutterBottom>
+          Compare date with previous day
+        </PageTitle>
         <form noValidate>
           <TextField
             id="date"
@@ -115,7 +125,7 @@ class VariationRateReport extends Component {
           >
             {this.state.variation >= 0 && <ArrowUpward />}
             {this.state.variation < 0 && <ArrowDownward />}
-            {this.state.variation}%
+            {Math.abs(this.state.variation)}%
           </RateText>
         )}
         <div />
