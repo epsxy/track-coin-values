@@ -1,5 +1,9 @@
 # Track crypto currency values
 
+## Demo
+
+![Demo](demo.png)
+
 ## Features
 
 This application displays the history of some crypto currencies value.
