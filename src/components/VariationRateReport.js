@@ -57,7 +57,8 @@ class VariationRateReport extends Component {
     super(props);
     this.state = {
       coinHistory: [],
-      variation: undefined
+      variation: undefined,
+      isVariationInitialized: false
     };
   }
 
@@ -91,34 +92,33 @@ class VariationRateReport extends Component {
   * - Test the code
   */
   computePriceVariation = () => {
+    if (!this.state.currentDate) {
+      this.setState({ isVariationInitialized: false, variation: undefined });
+      return;
+    }
     const valuesCurrentDay = this.state.coinHistory.filter(
       value =>
         moment(value.timestamp).format("YYYY-MM-DD") === this.state.currentDate
     );
-    console.log(`valuesCurrentDay=${valuesCurrentDay}`);
     if (!valuesCurrentDay) {
-      this.setState({ variation: undefined });
+      this.setState({ isVariationInitialized: true, variation: undefined });
       return;
     }
     const indexOfSelectedValue = this.state.coinHistory.indexOf(
       valuesCurrentDay[0]
     );
-    console.log(`indexOfSelectedValue=${indexOfSelectedValue}`);
 
     if (indexOfSelectedValue <= 0) {
-      this.setState({ variation: undefined });
+      this.setState({ isVariationInitialized: true, variation: undefined });
       return;
     }
 
-    /* ISSUE */
     const previousValue = this.state.coinHistory[indexOfSelectedValue - 1];
     const valuesPreviousDay = this.state.coinHistory.filter(
       value =>
         moment(value.timestamp).format("YYYY-MM-DD") ===
         moment(previousValue.timestamp).format("YYYY-MM-DD")
     );
-    console.log(`previousValue=${previousValue}`);
-    console.log(`valuesPreviousDay=${valuesPreviousDay}`);
 
     const averageValuePreviousDay =
       valuesPreviousDay.reduce((sum, data) => {
@@ -128,15 +128,13 @@ class VariationRateReport extends Component {
       valuesCurrentDay.reduce((sum, data) => {
         return sum + parseFloat(data.price);
       }, 0) / valuesCurrentDay.length;
-    console.log(`averageValuePreviousDay=${averageValuePreviousDay}`);
-    console.log(`averageValueCurrentDay=${averageValueCurrentDay}`);
 
     const percentage =
       ((averageValueCurrentDay - averageValuePreviousDay) * 100) /
       averageValuePreviousDay;
     const variation = Math.round(percentage * 100) / 100;
-    console.log(`variation=${variation}`);
-    this.setState({ variation: variation });
+
+    this.setState({ isVariationInitialized: true, variation: variation });
   };
 
   render() {
@@ -156,21 +154,23 @@ class VariationRateReport extends Component {
             }}
           />
         </form>
-        {this.state.variation !== undefined && (
-          <RateText
-            variant="body1"
-            gutterBottom
-            color={this.state.variation >= 0 ? "primary" : "secondary"}
-          >
-            {this.state.variation > 0 && <ArrowUpward />}
-            {this.state.variation < 0 && <ArrowDownward />}
-            {this.state.variation === 0 && <ArrowForward />}
-            {Math.abs(this.state.variation)}%
-          </RateText>
-        )}
-        {this.state.variation === undefined && (
-          <NoDataText color="textSecondary">No data</NoDataText>
-        )}
+        {this.state.variation !== undefined &&
+          this.state.isVariationInitialized && (
+            <RateText
+              variant="body1"
+              gutterBottom
+              color={this.state.variation >= 0 ? "primary" : "secondary"}
+            >
+              {this.state.variation > 0 && <ArrowUpward />}
+              {this.state.variation < 0 && <ArrowDownward />}
+              {this.state.variation === 0 && <ArrowForward />}
+              {Math.abs(this.state.variation)}%
+            </RateText>
+          )}
+        {this.state.variation === undefined &&
+          this.state.isVariationInitialized && (
+            <NoDataText color="textSecondary">No data</NoDataText>
+          )}
         <div />
       </VariationRateReportContainer>
     );
