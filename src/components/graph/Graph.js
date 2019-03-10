@@ -13,15 +13,7 @@ import { connect } from "react-redux";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import styled from "styled-components";
-
-const GraphContainer = styled.div`
-  margin-bottom: 1em;
-`;
-
-const GraphControlsContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-`;
+import { GraphContainer, GraphControlsContainer } from "./style";
 
 class Graph extends Component {
   constructor(props) {

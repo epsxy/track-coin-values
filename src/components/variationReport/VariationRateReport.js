@@ -7,51 +7,12 @@ import styled from "styled-components";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import ArrowForward from "@material-ui/icons/ArrowForward";
-
-const VariationRateReportContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  @media (max-width: 550px) {
-    flex-direction: column;
-    min-height: 250px;
-  }
-`;
-
-const PageTitle = styled(Typography)`
-  && {
-    font-size: 1.5em;
-    margin-right: 1em;
-    @media (max-width: 550px) {
-      margin-bottom: 1em
-      margin-right: 0;
-    }
-  }
-`;
-
-const RateText = styled(Typography)`
-  && {
-    font-size: 2em;
-    margin-left: 0.5em;
-    min-width: 115px;
-    @media (max-width: 550px) {
-      margin-top: 1em;
-      margin-left: 0;
-    }
-  }
-`;
-
-const NoDataText = styled(Typography)`
-  && {
-    font-size: 2em;
-    margin-left: 0.5em;
-    @media (max-width: 550px) {
-      margin-top: 1em;
-      margin-left: 0;
-    }
-  }
-`;
+import {
+  VariationRateReportContainer,
+  PageTitle,
+  RateText,
+  NoDataText
+} from "./style";
 
 class VariationRateReport extends Component {
   constructor(props) {

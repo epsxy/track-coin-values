@@ -1,11 +1,7 @@
 import React, { Component } from "react";
-import green from "@material-ui/core/colors/green";
 import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Input from "@material-ui/core/Input";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FilledInput from "@material-ui/core/FilledInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -17,22 +13,7 @@ import {
   selectCoinId
 } from "../../actions/index";
 import { connect } from "react-redux";
-import styled from "styled-components";
-
-const FiltersContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  margin-bottom: 1em;
-  @media (max-width: 550px) {
-    flex-direction: column;
-  }
-`;
-
-const TimeLengthGroup = styled(RadioGroup)`
-  && {
-    justify-content: center;
-  }
-`;
+import { FiltersContainer, TimeLengthGroup } from "./style";
 
 class Filters extends Component {
   constructor(props) {
