@@ -162,7 +162,7 @@ class Graph extends Component {
             <XAxis
               dataKey="timestamp"
               domain={["dataMin", "dataMax"]}
-              minTickGap={35}
+              minTickGap={25}
               tickFormatter={timestamp => this.formatXAxisLabel(timestamp)}
             />
             <YAxis
