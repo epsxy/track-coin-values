@@ -34,6 +34,7 @@ const RateText = styled(Typography)`
   && {
     font-size: 2em;
     margin-left: 0.5em;
+    min-width: 115px;
     @media (max-width: 550px) {
       margin-top: 1em;
       margin-left: 0;
