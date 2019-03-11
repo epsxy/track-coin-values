@@ -32,6 +32,12 @@ npm run start
 npm run build
 ```
 
+## Todo
+
+- Add `PropTypes`
+- Add Tests
+- Fix all `Todos` in Code
+
 ## Licence
 
 Copyright 2019 Epsxy
